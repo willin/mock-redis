@@ -3,7 +3,7 @@ const data = {};
 module.exports = {
   get(key) {
     if (data[key]) {
-      if (new Date().getTime() - data[key].expires > 0) {
+      if (data[key].expires === 0 || data[key].expires - new Date().getTime() > 0) {
         return data[key].val;
       }
       delete data[key];
@@ -13,7 +13,7 @@ module.exports = {
   setex(key, expires, val) {
     data[key] = {
       val,
-      expires: new Date().getTime() + expires * 1000
+      expires: expires === 0 ? 0 : new Date().getTime() + expires * 1000
     };
     return true;
   },

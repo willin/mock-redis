@@ -2,8 +2,11 @@ const data = {};
 
 module.exports = {
   get(key) {
-    if (data[key] && new Date().getTime() - data[key].expires > 0) {
-      return data[key].val;
+    if (data[key]) {
+      if (new Date().getTime() - data[key].expires > 0) {
+        return data[key].val;
+      }
+      delete data[key];
     }
     return null;
   },
@@ -16,5 +19,9 @@ module.exports = {
   },
   set(key, val) {
     return this.setex(key, 0, val);
+  },
+  del(key) {
+    delete data[key];
+    return true;
   }
 };
